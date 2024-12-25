@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+message TikaFileExtract {
+  required string filename = 1;
+}
+
+message TikaFileExtractResult {
+  required string filename = 1;
+  required string path = 2;
+  required string mime_type = 3;
+  required string content = 4;
+}
+
+message ListTikaFileExtractResult {
+  repeated TikaFileExtractResult results = 1;
+}

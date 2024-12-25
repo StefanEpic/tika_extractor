@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+  tika_extractor_service:
+    image: tika_extractor_service
+    container_name: tika_extractor_service
+    restart: always
+    build:
+      context: ..
+      dockerfile: ./build/Dockerfile
+    environment:
+      TIKA_EXTRACTOR_SERVICE_PORT: 8000
+      TIKA_EXTRACTOR_SERVICE_GRPC_PORT: 50051
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
+      PUBLISH_QUEUE: tika_extractor_service_output
+      SUBSCRIBE_QUEUE: tika_extractor_service_input
+    ports:
+      - 8000:8000
+      - 50051:50051
+    volumes:
+      - ../input_dir/:/root/input_dir/
+      - ../output_dir/:/root/output_dir/
+    depends_on:
+      - rabbitmq
+    command: bash -c "bash ./web/run_tika.sh && gunicorn -c gunicorn.conf.py main:app"
+
+  rabbitmq:
+    image: rabbitmq:3.10.7-management
+    hostname: rabbitmq
+    ports:
+      - 15672:15672
+      - 5672:5672

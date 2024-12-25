@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import "tika_file_extract.proto";
+
+service TikaFileExtractor {
+  rpc ExtractFromFile (TikaFileExtract) returns (ListTikaFileExtractResult) {}
+  rpc ExtractFromFileClientStream (stream TikaFileExtract) returns (ListTikaFileExtractResult) {}
+  rpc ExtractFromFileServerStream (TikaFileExtract) returns (stream ListTikaFileExtractResult) {}
+  rpc ExtractFromFileBothStream (stream TikaFileExtract) returns (stream ListTikaFileExtractResult) {}
+}
